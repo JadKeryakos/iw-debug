@@ -41,3 +41,6 @@ dist/
 lib/
 __static_webviz__/
 .reg/
+
+# beta-versions
+iw-debug-v*/

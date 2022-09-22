@@ -74,3 +74,6 @@ __static_webviz__/
 
 # reg-suit generated files
 .reg/
+
+# beta-versions
+iw-debug-v*/
