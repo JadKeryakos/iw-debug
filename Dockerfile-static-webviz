@@ -7,7 +7,7 @@
 # This is a static build of just the Webviz application.
 # This container is published at https://hub.docker.com/r/cruise/webviz.
 
-FROM node:12.22 AS builder
+FROM node:16.13.2-slim AS builder
 
 # Copy only the files necessary for installing our package dependencies. This
 # way, if the code is updated but the dependencies are the same, we can still
@@ -30,8 +30,12 @@ COPY packages/webviz-core/package.json \
      packages/webviz-core/package-lock.json \
      packages/webviz-core/
 
+# MACBOOK M1 failing without this
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+
 # Install dependencies
 RUN npm run install-ci
+# RUN npm run bootstrap
 
 # Copy the rest of the code
 COPY . /app
