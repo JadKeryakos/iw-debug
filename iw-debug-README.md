@@ -30,4 +30,4 @@ localhost:8080
 
 - Finally Drag and Drop and the bag file you wish to review onto the page
 
-![webviz](/docs/pics/webviz_after_drop.png
+![webviz](/docs/pics/webviz_after_drop.png)
