@@ -39,8 +39,9 @@ export function panelsByCategory() {
   const TwoDimensionalPlot = require("webviz-core/src/panels/TwoDimensionalPlot").default;
   const ThreeDimensionalViz = require("webviz-core/src/panels/ThreeDimensionalViz").default;
   const { ndash } = require("webviz-core/src/util/entities");
-  // const Table = require("webviz-core/src/panels/Table").default;
+  const Table = require("webviz-core/src/panels/Table").default;
   const Terminal = require("webviz-core/src/panels/TerminalPanel").default;
+  const DollyDetection3D = require("webviz-core/src/panels/DollyDetection3D").default;
 
   const ros = [
     { title: "2D Plot", component: TwoDimensionalPlot },
@@ -54,7 +55,9 @@ export function panelsByCategory() {
     { title: "Raw Messages", component: RawMessages },
     { title: "rosout", component: Rosout },
     { title: "State Transitions", component: StateTransitions },
+    { title: "Table", component: Table},
     { title: "Terminal Outputs", component: Terminal },
+    { title: "Dolly Detection", component: DollyDetection3D},
   ];
 
   const utilities = [
