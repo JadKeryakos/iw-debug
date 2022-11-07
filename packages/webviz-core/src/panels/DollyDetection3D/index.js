@@ -35,6 +35,14 @@ import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader';
 import { Stats } from 'three/examples/jsm/libs/stats.module';
 
 // Remove creatable warning https://github.com/JedWatson/react-select/issues/2181
+
+class CameraIntrinsics {
+  center: Float32List;
+  dimensions: Float32List;
+  focal: Float32List;
+}
+
+
 class Creatable extends React.Component<{}, {}> {
   render() {
     return <ReactSelectCreatable {...this.props} />;
@@ -65,9 +73,34 @@ class DollyDetection3D extends PureComponent<Props> {
   //Define panelt type as Terminal 
   static panelType = "Dolly Detection 3D";
   initialize = async (e) => {
-
     e.preventDefault();
-    const imageFile = e.target.files[0];
+    const container = document.getElementById('dolly-ply');
+    container.innerHTML = ''
+    var imageFile;
+    var intrinsicsFile;
+
+    for(let i=0; i<e.target.files.length; i++){
+      if(e.target.files[i].name == 'depth.png'){
+        imageFile = e.target.files[i];
+      }else if(e.target.files[i].name == 'camera_intrinsics.json'){
+        intrinsicsFile = e.target.files[i];
+      }
+    }
+
+    console.log(intrinsicsFile);
+    let centerArray = [];
+    let focalArray = [];
+
+    const intrinsicsReader = new FileReader();
+    intrinsicsReader.readAsText(intrinsicsFile, 'UTF-8');
+    intrinsicsReader.onload = e => {
+      // console.log(e.target.result);
+      var json = JSON.parse(e.target.result);
+      centerArray = json.center;
+      focalArray = json.focal;
+
+    }
+    
     const reader = new FileReader();
     reader.readAsDataURL(imageFile);
     reader.onloadend = function (e){
@@ -89,10 +122,10 @@ class DollyDetection3D extends PureComponent<Props> {
         
         // center of the depth image (based on the camera intrinsics)
         // should be imported from the dolly detection folder -> camera_intrinsics
-        const center = new THREE.Vector2(359.6040344238281, 640.873046875)
+        const center = new THREE.Vector2(centerArray[0], centerArray[1])
 
         // focal disctance of the camera of the STR (iw.hub)
-        const focal = new THREE.Vector2(904.19287109375, 904.19287109375)
+        const focal = new THREE.Vector2(focalArray[0], focalArray[1])
         for(var y=0; y<myImage.height; y++){
           for(var x=0; x<myImage.width; x++){
             if(depthData){
@@ -136,7 +169,7 @@ class DollyDetection3D extends PureComponent<Props> {
         const camera = new THREE.PerspectiveCamera(45, myImage.width / myImage.height, 0.1, 10000);
         const renderer = new THREE.WebGL1Renderer();
         renderer.setSize(myImage.width, myImage.height);
-        const container = document.getElementById('dolly-ply');
+        
         container?.appendChild(renderer.domElement)
         
         const geometry = new THREE.BufferGeometry().setFromPoints(points);
@@ -205,7 +238,7 @@ class DollyDetection3D extends PureComponent<Props> {
     return (
       <div className={styles.filtersBar}>
         <div>
-        <input type="file" id="image-input" accept="image/*" style={{cursor: "pointer"}} onChange={(e) => this.initialize(e)} />
+        <input type="file" id="image-input" webkitdirectory="" style={{cursor: "pointer"}} onChange={(e) => this.initialize(e)} />
         </div>
       </div>
     );
