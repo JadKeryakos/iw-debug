@@ -101,6 +101,7 @@ export const UnconnectedPlaybackControls = memo<PlaybackControlProps>((props: Pl
   const [hoverComponentId] = useState<string>(uuid.v4());
   const setHoverValue = useSetHoverValue();
   const onMouseMove = useCallback((e: SyntheticMouseEvent<HTMLDivElement>) => {
+    console.log("Moving slider")
     const { activeData } = playerState.current;
     if (!activeData) {
       return;
@@ -116,9 +117,46 @@ export const UnconnectedPlaybackControls = memo<PlaybackControlProps>((props: Pl
     const y = currentEl.getBoundingClientRect().top;
 
     const value = currentSlider.getValueAtMouse(e);
+    // console.log("Value = ", value)
     const stamp = fromSec(value);
-    const timeFromStart = subtractTimes(stamp, startTime);
+    if((formatTime(stamp)).includes("PM")){
+      console.log("Stamp Afternoon = ", formatTime(stamp))
+      var timeInPm = formatTime(stamp).split(":");
+      if(timeInPm[0]=='1'){
+        timeInPm[0] = '13';
+      }else if(timeInPm=='2'){
+        timeInPm[0] = '14';
+      }else if(timeInPm[0]=='3'){
+        timeInPm[0] = '15';
+      }else if(timeInPm=='4'){
+        timeInPm[0] = '16';
+      }else if(timeInPm=='5'){
+        timeInPm[0] = '17';
+      }else if(timeInPm=='6'){
+        timeInPm[0] = '18';
+      }else if(timeInPm=='7'){
+        timeInPm[0] = '19';
+      }else if(timeInPm=='8'){
+        timeInPm[0] = '20';
+      }else if(timeInPm=='9'){
+        timeInPm[0] = '21';
+      }else if(timeInPm=='10'){
+        timeInPm[0] = '22';
+      }else if(timeInPm=='11'){
+        timeInPm[0] = '23';
+      }
+      var newTime = timeInPm[0]+":"+timeInPm[1]+":"+timeInPm[2];
+      console.log("New time is: ", newTime)
 
+    }else{
+      var timeInPm = formatTime(stamp).split(":");
+      if(timeInPm[0]=='12'){
+        timeInPm[0] = '00'
+      }
+      console.log("Stamp Morning = ", formatTime(stamp))
+    }
+    const timeFromStart = subtractTimes(stamp, startTime);
+    // console.log("Time from start = ", timeFromStart)
     const tip = (
       <div className={classnames(tooltipStyles.tooltip, styles.tip)}>
         <TooltipItem title="ROS" value={formatTimeRaw(stamp)} />

@@ -297,6 +297,7 @@ function PlayerManager({
     <>
       <DocumentDropListener
         filesSelected={({ files, shiftPressed }: { files: FileList | File[], shiftPressed: boolean }) => {
+          console.log("File has been dropped")
           if (shiftPressed && usedFiles.current.length === 1) {
             usedFiles.current = [usedFiles.current[0], files[0]];
           } else if (files.length === 2) {

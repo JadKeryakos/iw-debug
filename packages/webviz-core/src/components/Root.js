@@ -72,7 +72,7 @@ function App({ importPanelLayout: importPanelLayoutProp }) {
                     <a href="/">
                       <Logo width={LOGO_SIZE} height={LOGO_SIZE} />
                     </a>
-                    webviz
+                    Idealworks Debug
                   </div>
                 </div>
 
